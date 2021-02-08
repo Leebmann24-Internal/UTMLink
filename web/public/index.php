@@ -26,7 +26,7 @@
                  <input class="form-control" type ="text" required placeholder="Marketing medium.." id="medium" name="medium"
                         value="<?PHP if(isset($_POST['medium'])){echo $_POST['medium'];}?>"><br>
             <span>*</span>
-            <label for ="name">Kampagne</label>
+            <label for ="campaign">Kampagne</label>
                  <input class="form-control" type ="text" required placeholder="Produkt, promo code.." id="campaign" name="campaign"
                         value="<?PHP if(isset($_POST['campaign'])){echo $_POST['campaign'];}?>"><br>
             <span>*</span>
@@ -50,21 +50,21 @@
             ?>" id="tiny" name="tiny">
             <label id="labeltextarea">
                 Tiny URL :
-                <textarea id="secarea" class="form-control" rows="3" readonly=""><?php
-                   if (isset($_POST['url'])){
-                        require_once('./Models/TinyUrl.php');
+            <textarea id="secarea" class="form-control" rows="3" readonly=""><?php
+               if (isset($_POST['url'])){
+                    require_once('./Models/TinyUrl.php');
 
-                        $buildUrl = new TinyUrl();
-                        echo file_get_contents('http://tinyurl.com/api-create.php?url=' .$buildUrl->generateUrl(
-                                $_POST['url'],$_POST['source'],$_POST['medium'],
-                                $_POST['campaign'],$_POST['term'],$_POST['content']));
-                    }
-                    ?>
-                </textarea>
+                    $buildUrl = new TinyUrl();
+                    echo file_get_contents('http://tinyurl.com/api-create.php?url=' .$buildUrl->generateUrl(
+                            $_POST['url'],$_POST['source'],$_POST['medium'],
+                            $_POST['campaign'],$_POST['term'],$_POST['content']));
+                }
+                ?>
+            </textarea>
                 <input class="btn btn-primary" type="submit" value="Link erzeugen" id ="btn" name="button1">
             </label>
             <label  id="labeltextarea2">
-                URL :
+                    URL :
                 <textarea id="firstarea" class="form-control" rows="3"  readonly="" >
                     <?php
                         if (isset($_POST['url']))
