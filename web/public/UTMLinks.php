@@ -29,10 +29,10 @@
                 <tbody id="myTable">
 
                     <?php
-                    require_once("./Models/Tinyurl.php");
+                    require_once("./Models/TinyUrl.php");
 
                     $tinyUrls = new TinyUrl();
-                   $tinyUrlData = $tinyUrls->showTiny();
+                   $tinyUrlData = $tinyUrls->showTinyUrl();
                    foreach ($tinyUrlData as $tinyInfo){
                        ?>
                            <form method="post">
@@ -44,16 +44,19 @@
                         <td><?PHP echo $tinyInfo[4]; ?></td>
                          <td><a href="<?PHP echo $tinyInfo[5]; ?>" target="_blank"><?PHP echo $tinyInfo[5]; ?></a></td>
                         <td><input class="btn btn-primary" type="submit" id="delete" value="Löschen" >
+
                     </tr>
-                   <input type='hidden' name='test' id='test' value='".<?PHP $tinyInfo[5]; ?>."'  >
+                   <input type='hidden' name='tinyUrl' id='tinyUrl' value='<?PHP echo $tinyInfo[5]; ?>'  >
                            </form>
+
                    <?php
                    }
-                   if (!empty($_POST['test'])) {
-                       $tinyUrl= $tinyInfo[5];
-                       $tinyUrls->deleteTiny($tinyUrl);
+                    if (!empty($_POST['tinyUrl'])) {
 
-                   }
+                        $tinyUrl= $_POST['tinyUrl'];
+
+                        $tinyUrls->deleteTinyUrl($tinyUrl);
+                    }
 
                     ?>
 

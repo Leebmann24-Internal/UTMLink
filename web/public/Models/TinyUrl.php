@@ -1,19 +1,18 @@
 <?php
-    require('Database.php');
+require('Database.php');
 
 Class TinyUrl  {
 
-    function getUrl ()
+    private $pdo;
+
+    function __construct()
     {
+        $dbh = new Database();
+        $this->pdo = $dbh->pdo;
+    }
 
-        $url = $_POST['url'];
-        $source = $_POST['source'];
-        $medium = $_POST['medium'];
-        $campaign = $_POST['campaign'];
-        $term = $_POST['term'];
-        $content = $_POST['content'];
-        $tiny = $_POST['tiny'];
-
+    function generateUrl ($url,$source,$medium,$campaign,$term,$content)
+    {
 
         if (array_key_exists('button1',$_POST)) {
             $link = '';
@@ -34,46 +33,43 @@ Class TinyUrl  {
             }
             if ($content && $content != '') {
                 $link .= '&utm_content=' . $content;
-            } return $link;
-        }
-        elseif (array_key_exists('button2',$_POST)) {
-            if (!empty($tiny)) {
-                $saveTiny = new Database();
-                $saveTiny->saveTinyUrl($url, $source, $medium, $campaign, $term, $content, $tiny);
-
-                return "Erfolgreich Gespeichert";
             }
-            else {
-                return 'Fehler'; }
+            return $link;
         }
-
         return 'Fehler';
     }
 
-    function saveTiny($url, $source, $medium, $campaign, $term, $content, $tiny)
+    function saveTinyUrl($url, $source, $medium, $campaign, $term, $content, $tiny)
     {
-        $sql = "INSERT INTO UTMLinks (url,`source` , medium, campaign, term, content, tiny) VALUES ('$url','$source','$medium', '$campaign', '$term', '$content', '$tiny')";
+        try {
+        $sql = "INSERT  INTO UTMLinks (url,`source` , medium, campaign, term, content, tiny) VALUES (
+                                      '$url','$source','$medium', '$campaign', '$term', '$content', '$tiny')";
         $this->pdo->exec($sql);
         return TRUE;
+        } catch (Exception $e) {
+            return 'Tiny-Url konnte nicht gespeichert werden. Fehler:'. $e->getMessage();
+        }
     }
 
-    function showTiny()
+    function showTinyUrl()
     {
         $tinyUrlData = [];
-        $sql="SELECT * FROM UTMLinks";
-        $stmt= $this->pdo->prepare($sql);
+        try {
+        $stmt= $this->pdo->prepare("SELECT * FROM UTMLinks");
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $tinyUrlData[] =[$row['source'],$row['medium'],$row['campaign'],$row['content'],$row['term'],$row['tiny']];
-
-        } return $tinyUrlData;
+        }
+        return $tinyUrlData;
+        } catch (Exception $e) {
+            return 'Tiny-Url konnte nicht gelöscht werden. Fehler:'. $e->getMessage();
+        }
     }
     
-    function deleteTiny($tiny)
+    function deleteTinyUrl($tiny)
     {
         try {
-            $sql = "DELETE FROM UTMLinks WHERE tiny='$tiny'";
-            $this->pdo->exec($sql);
+            $this->pdo->exec("DELETE FROM UTMLinks WHERE tiny='$tiny'");
             return 'Tiny-Url erfolgreich gelöscht';
         } catch (Exception $e) {
             return 'Tiny-Url konnte nicht gelöscht werden. Fehler:'. $e->getMessage();

@@ -1,5 +1,5 @@
 <?php
-$servername = "3f76a808e00d";
+$servername = "mysql";
 $username = "root";
 $password = "root";
 $dbname = "test";
@@ -17,9 +17,8 @@ try {
                           term varchar(45) NOT NULL,
                           tiny varchar(45) NOT NULL
 )";
-   $conn->exec($sql);
+    $conn->exec($sql);
     echo "Table UTMLinks created successfully";
 } catch(PDOException $e) {
     echo $sql . "<br>" . $e->getMessage();
 }
-$conn = null;

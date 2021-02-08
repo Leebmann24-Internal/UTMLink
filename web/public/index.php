@@ -45,17 +45,22 @@
 
             <input type="hidden" value="<?php
                 if (array_key_exists('button1',$_POST)){
-                    require_once ('./Models/Tinyurl.php');
+                    require_once('./Models/TinyUrl.php');
                     $buildUrl = new TinyUrl();
-                    echo file_get_contents('http://tinyurl.com/api-create.php?url=' .$buildUrl->getUrl());
+                    echo file_get_contents('http://tinyurl.com/api-create.php?url=' .$buildUrl->generateUrl(
+                            $_POST['url'],$_POST['source'],$_POST['medium'],$_POST['campaign'],$_POST['term'],
+                            $_POST['content']));
                 }
             ?>" id="tiny" name="tiny">
             <label id="labeltextarea">
                 Tiny URL :
                 <textarea id="secarea" class="form-control" rows="3" readonly=""><?php
-                    if (array_key_exists('button1',$_POST)){
-                        require_once ('./Models/Tinyurl.php');
-                        echo file_get_contents('http://tinyurl.com/api-create.php?url=' . $buildUrl->getUrl());
+                   if (array_key_exists('button1',$_POST)){
+                    require_once('./Models/TinyUrl.php');
+                    $buildUrl = new TinyUrl();
+                    echo file_get_contents('http://tinyurl.com/api-create.php?url=' .$buildUrl->generateUrl(
+                            $_POST['url'],$_POST['source'],$_POST['medium'],
+                            $_POST['campaign'],$_POST['term'],$_POST['content']));
                     }
                     ?>
                 </textarea>
@@ -63,21 +68,27 @@
             </label>
             <label  id="labeltextarea2">
                 URL :
-                <textarea id="firstarea" class="form-control" rows="3"  readonly="" ><?php
-
-                    if ( isset($_POST['url']))
-                    { require_once ('./Models/Tinyurl.php');
-                       $safeurl = new TinyUrl();
-                       echo $safeurl->getUrl();
-
-                    }
-                    else
-                    {
-                       echo "Unzureichende angaben";
-                    }
-                  ?>
+                <textarea id="firstarea" class="form-control" rows="3"  readonly="" >
+                    <?php
+                        if (array_key_exists('button1',$_POST))
+                        { require_once('./Models/TinyUrl.php');
+                            $safeurl = new TinyUrl();
+                            echo $safeurl->generateUrl($_POST['url'],$_POST['source'],$_POST['medium'],$_POST['campaign'],$_POST['term'],$_POST['content']);
+                        } else {
+                           echo "Mehr angaben benötigt";
+                        }
+                    ?>
                 </textarea>
                 <input class="btn btn-primary" type="submit" value="Link Speichern" id="btn2" name="button2">
+                <?php
+                if (array_key_exists('button2', $_POST)) {
+                    if (!empty($_POST['tiny'])) {
+                    require_once ('./Models/TinyUrl.php');
+                    $safeTinyUrl= new TinyUrl();
+                    $safeTinyUrl->saveTinyUrl($_POST['url'],$_POST['source'],$_POST['medium'],$_POST['campaign'],$_POST['term'],$_POST['content'],$_POST['tiny']);
+                    }
+                }
+                ?>
             </label>
         </form>
     </div>
