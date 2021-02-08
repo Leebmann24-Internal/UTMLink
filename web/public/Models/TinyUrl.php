@@ -11,68 +11,70 @@ Class TinyUrl  {
         $this->pdo = $dbh->pdo;
     }
 
-    function generateUrl ($url,$source,$medium,$campaign,$term,$content)
+    function generateUrl(string $url, string $source, string $medium, string $campaign,string $term, string $content): string
     {
 
-        if (array_key_exists('button1',$_POST)) {
-            $link = '';
-            if ($url && $url != '') {
-                $link .= $url;
-            }
-            if ($source && $source != '') {
-                $link .= '/?utm_source=' . $source;
-            }
-            if ($medium && $medium != '') {
-                $link .= '&utm_medium=' . $medium;
-            }
-            if ($campaign && $campaign != '') {
-                $link .= '&utm_campaign=' . $campaign;
-            }
-            if ($term && $term != '') {
-                $link .= '&utm_term=' . $term;
-            }
-            if ($content && $content != '') {
-                $link .= '&utm_content=' . $content;
-            }
-            return $link;
+        $link = '';
+        if ($url && $url != '') {
+            $link .= $url;
         }
-        return 'Fehler';
+        if ($source && $source != '') {
+            $link .= '/?utm_source=' . $source;
+        }
+        if ($medium && $medium != '') {
+            $link .= '&utm_medium=' . $medium;
+        }
+        if ($campaign && $campaign != '') {
+            $link .= '&utm_campaign=' . $campaign;
+        }
+        if ($term && $term != '') {
+            $link .= '&utm_term=' . $term;
+        }
+        if ($content && $content != '') {
+            $link .= '&utm_content=' . $content;
+        }
+        return $link;
     }
 
-    function saveTinyUrl($url, $source, $medium, $campaign, $term, $content, $tiny)
+    function saveTinyUrl(string $url, string $source, string $medium, string $campaign, string $term, string $content, string $tinyUrl): bool
     {
         try {
-        $sql = "INSERT  INTO UTMLinks (url,`source` , medium, campaign, term, content, tiny) VALUES (
-                                      '$url','$source','$medium', '$campaign', '$term', '$content', '$tiny')";
-        $this->pdo->exec($sql);
-        return TRUE;
+            $sql = "INSERT  INTO UTMLinks (url,`source` , medium, campaign, term, content, tiny) 
+                    VALUES ('$url','$source','$medium', '$campaign', '$term', '$content', '$tinyUrl')";
+            $this->pdo->exec($sql);
+
+            echo "<br>Erfolgreich Gespeichert";
+            return TRUE;
         } catch (Exception $e) {
-            return 'Tiny-Url konnte nicht gespeichert werden. Fehler:'. $e->getMessage();
+            echo 'Tiny-Url konnte nicht gespeichert werden. Fehler:'. $e->getMessage();
+            return FALSE;
         }
     }
 
-    function showTinyUrls()
+    function showTinyUrls(): array
     {
         $tinyUrlData = [];
         try {
-        $stmt= $this->pdo->prepare("SELECT * FROM UTMLinks");
-        $stmt->execute();
-        while ($row = $stmt->fetch()) {
-            $tinyUrlData[] =[$row['source'],$row['medium'],$row['campaign'],$row['content'],$row['term'],$row['tiny']];
-        }
-        return $tinyUrlData;
+            $stmt= $this->pdo->prepare("SELECT * FROM UTMLinks");
+            $stmt->execute();
+            while ($row = $stmt->fetch()) {
+                $tinyUrlData[] = [$row['source'],$row['medium'],$row['campaign'],$row['content'],$row['term'],$row['tiny']];
+            }
+            return $tinyUrlData;
         } catch (Exception $e) {
-            return 'Tiny-Url konnte nicht gelöscht werden. Fehler:'. $e->getMessage();
+            die('Tiny-Url konnte nicht gelöscht werden. Fehler:'. $e->getMessage());
         }
     }
     
-    function deleteTinyUrl($tiny)
+    function deleteTinyUrl($tinyUrl): bool
     {
         try {
-            $this->pdo->exec("DELETE FROM UTMLinks WHERE tiny='$tiny'");
-            return 'Tiny-Url erfolgreich gelöscht';
+            $this->pdo->exec("DELETE FROM UTMLinks WHERE tiny='$tinyUrl'");
+            echo 'Tiny-Url erfolgreich gelöscht';
+            return TRUE;
         } catch (Exception $e) {
-            return 'Tiny-Url konnte nicht gelöscht werden. Fehler:'. $e->getMessage();
+            echo 'Tiny-Url konnte nicht gelöscht werden. Fehler:'. $e->getMessage();
+            return FALSE;
         }
     }
 }

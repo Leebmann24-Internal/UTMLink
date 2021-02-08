@@ -2,4 +2,4 @@
 etc/ssl/
 web/public/vendor
 web/public/composer.lock
-./data
+data/db

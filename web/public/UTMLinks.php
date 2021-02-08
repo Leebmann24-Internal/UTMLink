@@ -13,9 +13,7 @@
             <input id="myInput" type="text" placeholder="Search..">
             <a href="./" id="showLinks" class="btn btn-primary">TinyUrl Gen</a>
             <table class="table">
-
                 <thead class="thead-dark">
-
                     <tr>
                         <th>Quelle</th>
                         <th>Medium</th>
@@ -27,39 +25,32 @@
                     </tr>
                 </thead>
                 <tbody id="myTable">
-
                     <?php
-                    require_once("./Models/TinyUrl.php");
-
-                    $tinyUrls = new TinyUrl();
-                   $tinyUrlData = $tinyUrls->showTinyUrls();
-                   foreach ($tinyUrlData as $tinyInfo){
-                       ?>
-                           <form method="post">
-                    <tr>
-                        <td><?PHP echo $tinyInfo[0]; ?></td>
-                        <td><?PHP echo $tinyInfo[1]; ?></td>
-                        <td><?PHP echo $tinyInfo[2]; ?></td>
-                         <td><?PHP echo $tinyInfo[3]; ?></td>
-                        <td><?PHP echo $tinyInfo[4]; ?></td>
-                         <td><a href="<?PHP echo $tinyInfo[5]; ?>" target="_blank"><?PHP echo $tinyInfo[5]; ?></a></td>
-                        <td><input class="btn btn-primary" type="submit" id="delete" value="Löschen" >
-
-                    </tr>
-                   <input type='hidden' name='tinyUrl' id='tinyUrl' value='<?PHP echo $tinyInfo[5]; ?>'  >
-                           </form>
-
-                   <?php
-                   }
-                    if (!empty($_POST['tinyUrl'])) {
-
-                        $tinyUrl= $_POST['tinyUrl'];
-
-                        $tinyUrls->deleteTinyUrl($tinyUrl);
-                    }
-
+                        require_once("./Models/TinyUrl.php");
+                        $tinyUrls = new TinyUrl();
+                        $tinyUrls= $tinyUrls->showTinyUrls();
+                        foreach ($tinyUrls as $tinyInfo){
                     ?>
-
+                    <form method="post">
+                        <tr>
+                            <td><?PHP echo $tinyInfo[0]; ?></td>
+                            <td><?PHP echo $tinyInfo[1]; ?></td>
+                            <td><?PHP echo $tinyInfo[2]; ?></td>
+                            <td><?PHP echo $tinyInfo[3]; ?></td>
+                            <td><?PHP echo $tinyInfo[4]; ?></td>
+                            <td><a href="<?PHP echo $tinyInfo[5]; ?>" target="_blank"><?PHP echo $tinyInfo[5]; ?></a></td>
+                            <td><input class="btn btn-primary" type="submit" id="delete" value="Löschen">
+                        </tr>
+                        <input type='hidden' name='tinyUrl' id='tinyUrl' value='<?PHP echo $tinyInfo[5]; ?>'>
+                    </form>
+                    <?php
+                    }
+                    if (!empty($_POST['tinyUrl'])) {
+                        $deleteTinyUrl = new TinyUrl();
+                        $tinyUrl= $_POST['tinyUrl'];
+                        $deleteTinyUrl->deleteTinyUrl($tinyUrl);
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>

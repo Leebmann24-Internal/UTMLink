@@ -33,7 +33,8 @@ class Database
             die();
         }
     }
-    function createTableUTMLinks(){
+    function createTableUTMLinks():bool
+    {
         try {
 
 
@@ -48,9 +49,10 @@ class Database
 )";
         $this->pdo->exec($sql);
         echo "Table UTMLinks created successfully";
+        return TRUE;
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
-            die();
+            return False;
         }
     }
 }
