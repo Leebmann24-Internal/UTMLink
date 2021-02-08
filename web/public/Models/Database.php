@@ -33,4 +33,24 @@ class Database
             die();
         }
     }
+    function createTableUTMLinks(){
+        try {
+
+
+        $sql ="CREATE TABLE UTMLinks (
+                          url varchar(45) NOT NULL,
+                          source varchar(45) NOT NULL,
+                          medium varchar(45) NOT NULL,
+                          campaign varchar(45) NOT NULL,
+                          content varchar(45) NOT NULL,
+                          term varchar(45) NOT NULL,
+                          tiny varchar(45) NOT NULL
+)";
+        $this->pdo->exec($sql);
+        echo "Table UTMLinks created successfully";
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+            die();
+        }
+    }
 }

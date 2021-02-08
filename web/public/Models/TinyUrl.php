@@ -51,7 +51,7 @@ Class TinyUrl  {
         }
     }
 
-    function showTinyUrl()
+    function showTinyUrls()
     {
         $tinyUrlData = [];
         try {

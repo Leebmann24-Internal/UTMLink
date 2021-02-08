@@ -32,7 +32,7 @@
                     require_once("./Models/TinyUrl.php");
 
                     $tinyUrls = new TinyUrl();
-                   $tinyUrlData = $tinyUrls->showTinyUrl();
+                   $tinyUrlData = $tinyUrls->showTinyUrls();
                    foreach ($tinyUrlData as $tinyInfo){
                        ?>
                            <form method="post">
